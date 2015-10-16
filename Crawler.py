@@ -12,7 +12,7 @@ class Crawler:
         self.cookie = COOKIE
 
     def get_url(self, no):
-        return self.base_url + str(no) + '/bookmark'
+        return self.base_url + str(no)# + '/bookmark'
 
     def get_cookie(self):
         login_query = urllib.urlencode(USER_INFO)
@@ -29,5 +29,11 @@ class Crawler:
         soup = BeautifulSoup(response.read(), 'html.parser')
 
         phone = soup.find('div', { 'class' : 'bookmark-phone' })
+        data = soup.find('div', { 'class' : 'profile-summary' })
+        subject = data.contents[1].string
+        name = data.contents[3].contents[3].contents[0].string.strip()
+        age = data.contents[5].contents[3].string
+        school = data.contents[7].contents[3].string
+        profile = Profile(name, subject, age, school, phone)
 
-        print phone
+        return profile
