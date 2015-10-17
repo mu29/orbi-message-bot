@@ -2,8 +2,8 @@
 
 class Profile:
     def __init__(self, name, subject, age, school, phone):
-        self.name = name
-        self.subject = subject
-        self.age = age
-        self.school = school
-        self.phone = phone
+        self.name = name.encode('utf-8')
+        self.subject = subject.encode('utf-8')
+        self.age = age.encode('utf-8')
+        self.school = school.encode('utf-8')
+        self.phone = phone.encode('utf-8')
