@@ -25,6 +25,16 @@ class Crawler:
         cookie = response.headers.get('Set-Cookie')
         return cookie
 
+    def get_latest_no(self):
+        url = self.base_url + 'search/teachers?page=1'
+        document = urllib.urlopen(url)
+        soup = BeautifulSoup(document, 'html.parser')
+
+        teachers = soup.find_all('a', { 'class' : 'teacher-wrapper' })
+        latest_teacher = teachers[len(teachers) - 12]
+        no = latest_teacher['href'].split('?')[0][9:]
+        return int(no)
+
     def get_soup(self, url):
         request = urllib2.Request(url)
         request.add_header('cookie', self.cookie)
