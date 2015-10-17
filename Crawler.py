@@ -8,12 +8,15 @@ from bs4 import BeautifulSoup
 
 class Crawler:
     def __init__(self):
-        self.base_url = 'http://tutor.orbi.kr/teacher/'
+        self.base_url = 'http://tutor.orbi.kr/'
         self.login_url = 'https://login.orbi.kr/user/login/tutor'
         self.cookie = COOKIE
 
     def get_url(self, no):
-        return self.base_url + str(no)# + '/bookmark'
+        return self.base_url + 'teacher/' + str(no) + '/bookmark'
+
+    def get_pure_url(self, no):
+        return self.base_url + 'teacher/' + str(no)
 
     def get_cookie(self):
         login_query = urllib.urlencode(USER_INFO)
@@ -22,23 +25,32 @@ class Crawler:
         cookie = response.headers.get('Set-Cookie')
         return cookie
 
-    def get_profile(self, no):
-        url = self.get_url(no)
+    def get_soup(self, url):
         request = urllib2.Request(url)
         request.add_header('cookie', self.cookie)
         response = urllib2.urlopen(request)
         soup = BeautifulSoup(response.read(), 'html.parser')
+        return soup
+
+    def get_profile(self, no):
+        url = self.get_url(no)
+        soup = self.get_soup(url)
 
         enable = soup.find('li', { 'class' : 'student-item' })
-        if not enable:
+        if not enable is None:
             return None
 
-        phone = soup.find('div', { 'class' : 'bookmark-phone' }).string
+        phone = soup.find('div', { 'class' : 'bookmark-phone' })
+        if phone is None:
+            soup = self.get_soup(self.get_pure_url(no))
+            phone = soup.find('div', { 'class' : 'bookmark-phone' })
+
+        phone = phone.string
         data = soup.find('div', { 'class' : 'profile-summary' })
         subject = data.contents[1].string
         name = data.contents[3].contents[3].contents[0].string.strip()
         age = data.contents[5].contents[3].string
         school = data.contents[7].contents[3].string
         profile = Profile(name, subject, age, school, phone)
-
+        print school + " " + name
         return profile
