@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 
+import sys
 import time
 from crawler import *
 from database import *
@@ -19,6 +20,6 @@ while True:
 
         time.sleep(3600)
     except:
-        for e in sys.exc_info
+        for e in sys.exc_info():
             print e
         continue
