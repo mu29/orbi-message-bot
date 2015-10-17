@@ -11,10 +11,16 @@ class DataBase():
     def execute(self, query):
         cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query)
-
         return cursor
 
     def put(self, profile):
         variables = "('{0}', '{1}', '{2}', '{3}', '{4}');".format(profile.name, profile.subject, profile.age, profile.school, profile.phone)
         query = "INSERT INTO `teachers`(`name`, `subject`, `age`, `school`, `phone`) VALUES " + variables
         self.execute(query).close()
+
+    def get_count(self):
+        query = "SELECT COUNT(*) AS count FROM `teachers`;"
+        cursor = self.execute(query)
+        result = cursor.fetchone()['count']
+        cursor.close()
+        return result
