@@ -3,6 +3,7 @@
 import urllib
 import urllib2
 from settings import *
+from profile import *
 from bs4 import BeautifulSoup
 
 class Crawler:
@@ -28,7 +29,11 @@ class Crawler:
         response = urllib2.urlopen(request)
         soup = BeautifulSoup(response.read(), 'html.parser')
 
-        phone = soup.find('div', { 'class' : 'bookmark-phone' })
+        enable = soup.find('li', { 'class' : 'student-item' })
+        if not enable:
+            return None
+
+        phone = soup.find('div', { 'class' : 'bookmark-phone' }).string
         data = soup.find('div', { 'class' : 'profile-summary' })
         subject = data.contents[1].string
         name = data.contents[3].contents[3].contents[0].string.strip()
