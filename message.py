@@ -4,7 +4,8 @@ import requests
 from settings import *
 from database import *
 
-def send_message(phone):
+def send_message(teacher):
+    print teacher
     try:
         response = requests.post(
             url = MESSAGE_SERVER_URL,
@@ -13,13 +14,14 @@ def send_message(phone):
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
             },
             data = {
-                'msg_body': MESSAGE,
+                'subject': teacher['name'] + u' 선생님께',
+                'msg_body': MESSAGE.format(teacher['name']),
                 'send_phone': SEND_PHONE,
-                'dest_phone': phone,
+                'dest_phone': teacher['phone'],
             },
         )
         if response.status_code == 200:
-            print phone + u'으로 메시지 전송'
+            print teacher['phone'] + u'으로 메시지 전송'
         else:
             print ('Error ' + response.status_code)
     except requests.exceptions.RequestException:
@@ -36,7 +38,7 @@ while True:
         if not db.is_available(teacher_id):
             continue
 
-        send_message(db.get_phone(teacher_id))
+        send_message(db.get_teacher(teacher_id))
         db.update_available(teacher_id)
         count += 1
         if count > MESSAGE_COUNT:
