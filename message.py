@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 
+import json
 import requests
 from settings import *
 from database import *
@@ -31,6 +32,7 @@ db = DataBase()
 
 teacher_id = 0
 count = 0
+error_count = 0
 while True:
     try:
         teacher_id += 1
@@ -40,13 +42,19 @@ while True:
         send_message(db.get_teacher(teacher_id))
         db.update_available(teacher_id)
         count += 1
-        if count > MESSAGE_COUNT:
+        if count >= MESSAGE_COUNT:
             break
     except:
         if teacher_id >= db.get_count():
             break
         for e in sys.exc_info():
             print e
+        error_count += 1
         continue
 
-print u'메시지 전송 완료'
+result_message = u'{0}번째 선생님까지 메시지 전송. 남은 선생님 {1}명, 오류 {2}건'.format(teacher_id, db.get_count() - teacher_id, error_count)
+requests.post(
+    url = SLACK_BOT_URL,
+    data = json.dumps({ "text" : result_message }),
+)
+print result_message
