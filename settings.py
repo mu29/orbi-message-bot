@@ -10,5 +10,7 @@ COOKIE = 'session='
 SEND_PHONE = ''
 MESSAGE_SERVER_URL = ''
 MESSAGE_API_KEY = ''
-MESSAGE = u'LMS 테스트'
+MESSAGE = u'''안녕하세요 {0} 선생님'''
 MESSAGE_COUNT = 100
+
+SLACK_BOT_URL = ''
