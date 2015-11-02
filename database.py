@@ -21,6 +21,13 @@ class DataBase():
         query = "INSERT INTO `teachers`(`name`, `subject`, `age`, `school`, `phone`) VALUES " + variables
         self.execute(query).close()
 
+    def get_phone(self, id):
+        query = "SELECT `phone` FROM `teachers` WHERE `id` = '{0}';".format(id)
+        cursor = self.execute(query)
+        result = cursor.fetchone()['phone']
+        cursor.close()
+        return result
+
     def is_exists(self, phone):
         query = "SELECT COUNT(*) AS count FROM `teachers` WHERE `phone` = '{0}';".format(phone)
         cursor = self.execute(query)
