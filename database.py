@@ -21,12 +21,23 @@ class DataBase():
         query = "INSERT INTO `teachers`(`name`, `subject`, `age`, `school`, `phone`) VALUES " + variables
         self.execute(query).close()
 
-    def check_exists(self, phone):
+    def is_exists(self, phone):
         query = "SELECT COUNT(*) AS count FROM `teachers` WHERE `phone` = '{0}';".format(phone)
         cursor = self.execute(query)
         result = cursor.fetchone()['count']
         cursor.close()
         return int(result) > 0
+
+    def is_available(self, id):
+        query = "SELECT `contact` FROM `teachers` WHERE `id` = '{0}';".format(id)
+        cursor = self.execute(query)
+        result = cursor.fetchone()['contact']
+        cursor.close()
+        return int(result) == 0
+
+    def update_available(self, id):
+        query = "UPDATE `teachers` SET `contact` = '1' WHERE `id` = '{0}';".format(id)
+        cursor = self.execute(query).close()
 
     def get_count(self):
         query = "SELECT COUNT(*) AS count FROM `teachers`;"
