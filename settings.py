@@ -6,3 +6,9 @@ USER_INFO = {
 }
 
 COOKIE = 'session='
+
+SEND_PHONE = ''
+MESSAGE_SERVER_URL = ''
+MESSAGE_API_KEY = ''
+MESSAGE = u'LMS 테스트'
+MESSAGE_COUNT = 100

@@ -39,7 +39,7 @@ while True:
         send_message(db.get_phone(teacher_id))
         db.update_available(teacher_id)
         count += 1
-        if count > 10:
+        if count > MESSAGE_COUNT:
             break
     except:
         if teacher_id >= db.get_count():
