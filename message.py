@@ -5,7 +5,6 @@ from settings import *
 from database import *
 
 def send_message(teacher):
-    print teacher
     try:
         response = requests.post(
             url = MESSAGE_SERVER_URL,
@@ -21,7 +20,7 @@ def send_message(teacher):
             },
         )
         if response.status_code == 200:
-            print teacher['phone'] + u'으로 메시지 전송'
+            print u'[{0}] {1} 선생님에게 메시지 전송'.format(teacher['id'], teacher['name'])
         else:
             print ('Error ' + response.status_code)
     except requests.exceptions.RequestException:
