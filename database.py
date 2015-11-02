@@ -14,7 +14,7 @@ class DataBase():
         return cursor
 
     def put(self, profile):
-        if self.check_exists(profile.phone):
+        if self.is_exists(profile.phone):
             return
 
         variables = "('{0}', '{1}', '{2}', '{3}', '{4}');".format(profile.name, profile.subject, profile.age, profile.school, profile.phone)
